@@ -1,0 +1,62 @@
+小Q有X首长度为A的不同的歌和Y首长度为B的不同的歌，现在小Q想用这些歌组成一个总长度正好为
+K的歌单，每首歌最多只能在歌单中出现一次，在不考虑歌单内歌曲的先后顺序的情况下，请问有多少种组成歌单的方法。
+可以看成类似01背包问题，不断的网需要拼凑的数量里加1，判断整首歌的长度K是否仍需要A和B长度的歌来拼接
+#include <iostream>
+ 
+#include <cstring>
+ 
+using namespace std;
+ 
+  
+ 
+int K, A, X, B, Y;
+ 
+int dp[201][1001];
+ 
+int p[201];
+ 
+  
+ 
+int main()
+ 
+{
+ 
+    while(cin >> K)
+ 
+    {
+ 
+        cin >> A >> X >> B >> Y;
+ 
+        memset(dp, 0, sizeof(dp));
+ 
+        dp[0][0] = 1;
+ 
+        for(int i = 1; i <= X; i++)
+ 
+            p[i] = A;
+ 
+        for(int j = X + 1; j <= X + Y; j++)
+ 
+            p[j] = B;
+ 
+        for(int i = 1; i <= X + Y; i++)
+ 
+            for(int j = 0; j <= K; j++)
+ 
+            {
+ 
+                if(j >= p[i])
+ 
+                    dp[i][j] = (dp[i - 1][j] % 1000000007 + dp[i - 1][j - p[i]] % 1000000007) % 1000000007;
+ 
+                else
+ 
+                    dp[i][j] = dp[i - 1][j] % 1000000007;
+ 
+            }
+ 
+        cout << dp[X + Y][K] % 1000000007 << endl;
+ 
+    }
+ 
+}
