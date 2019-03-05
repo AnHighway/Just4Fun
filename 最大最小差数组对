@@ -1,0 +1,92 @@
+有n个数，两两组成二元组，差最小的有多少对呢？差最大呢？
+
+思路：
+先排序，然后对有序数组分别求差值最大的对数和差值最小的对数。
+
+排序之后，
+
+差值最大的好求，看有序数组有几个最小值和几个最大值，相乘即可。
+
+差值最小的，由于是有序数组，必定是相邻的差值较小，故由排序后的有序数组求出差值最小值。如果差值最小值为0，则算出数组中相等的元素的对数；如果差值最小值不为0，则只需计算有多少个最小值即可。
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+
+
+int main()
+{
+
+    int n;
+
+    while (cin>>n) 
+    {
+        vector<int> nums(n);
+        for (int i=0; i<n; i++) 
+        {
+            cin>>nums[i];
+        }
+
+        int minNum=0, maxNum=0;
+        //排序
+        sort(nums.begin(), nums.end());
+
+        //最大
+        int m1 = 0, m2 = n-1, a=1, b=1;
+        while (nums[m1+1] == nums[m1]) 
+        {
+            a++;
+            m1++;
+        }
+
+        while (nums[m2] == nums[m2-1])
+        {
+            b++;
+            m2--;
+        }
+        maxNum = a*b;
+
+        //最小
+        int minTemp=nums[n-1];
+        for (int i=1; i<n; i++)
+        {
+            if (nums[i]-nums[i-1]<minTemp) 
+            {
+                minTemp = nums[i]-nums[i-1];
+            }
+        }
+
+        if (minTemp >0) 
+        {
+
+            for (int i=1; i<n; i++)
+            {
+                if (nums[i]-nums[i-1] == minTemp) 
+                {
+                    minNum++;
+                }
+            }
+
+        }
+        else
+        {
+
+            for (int i=1; i<n; i++) 
+            {
+                int j=i-1;
+                while (nums[j]==nums[i] && j>=0) 
+                {
+                    minNum++;
+                    j--;
+                }
+            }
+        }
+
+        cout<<minNum<<" "<<maxNum<<endl;
+
+    }
+
+    return 0;
+}
