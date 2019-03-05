@@ -1,0 +1,40 @@
+字符移位  ：把一个字符串的大写字母放到字符串的后面，各个字符的相对位置不变，且不能申请额外的空间。  
+输入描述:  输入数据有多组，每组包含一个字符串s，且不能申请额外的空间。 
+输入例子:
+
+AkleBiCeilD
+
+输出例子:
+
+kleieilABCD
+
+
+#include <iostream>
+#include <string.h>
+using namespace std;
+int main()
+{
+    char a[1000];
+    while(cin>>a)
+    {
+      int len = strlen(a);
+      int end = len-1;
+       for(int i = 0; i<= end;)
+       {
+            if(a[i]>='A'&&a[i]<='Z')
+            { 
+                char temp = a[i];
+                for(int j=i; j<len; j++)
+                {
+                    a[j]=a[j+1];
+                }
+                a[len-1] = temp;
+                end--;
+            }
+           else  i++;
+       }
+       cout<<a<<endl;
+    }
+    return 0;
+    
+}
