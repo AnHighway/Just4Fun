@@ -1,0 +1,41 @@
+有字符串s1和s2，要求在s1中删除所有s2的字符
+
+例如：
+str1为 "asdfsa123fasdf123452345fasfasdf182734891624389sadfaklsjfklj"
+str2为 "0123456789"
+删除后
+str1为 "asdfsafasdffasfasdfsadfaklsjfklj"
+
+
+void del_chars(char *str, char *chars)
+{
+    char ascii_buff[256] = {0};
+    char buf[strlen(str)];
+    char *ps1;
+    char *ps2;
+
+    ps1 = chars;
+    while (*ps1) { // 遍历chars，将要被删除的字符对应数组的位置置为1。
+        ascii_buff[*ps1++] = 1;
+    }
+
+    ps2 = str;
+    while (*ps2) { // 遍历str，将str中要被删除的字符也置为1。
+        if ( ascii_buff[*ps2] == 1 ) {
+            *ps2 = 1;
+        }
+        ps2++;
+    }
+
+    ps1 = str; // 将str中所有为1的位置清理掉。
+    ps2 = buf;
+    while (*ps1) {
+        if (*ps1 != 1) {
+            *ps2 = *ps1;
+            ps2++;
+        }
+        ps1++;
+    }
+    *ps2 = '\0';
+    strcpy(str, buf);
+}
