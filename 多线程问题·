@@ -18,3 +18,7 @@ LOCK<mutex>lock(m_mutex)
 其实在STL库里有，叫lock_guard;
 可以利用它创建mutex;
 lock_guard<mutex>lock(mutex);
+然后还有 方法lock(mutex1,mutex2,.....)调用这个方法可以同时锁住多个mutex，这样就不会引起死锁，例如要锁两个的时候，一个锁了第一个，一个锁了第二个，两
+个线程互相等着对方。
+使用这个方法后，在利用lock_guard<mutex>lockA(mutex,adopt_lock);
+adopt_lock就不会再一次锁一次。
