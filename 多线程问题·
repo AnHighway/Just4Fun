@@ -1,0 +1,4 @@
+1.没有必要的话不要共享数据，容易造成线程间争抢资源造成结果出错。
+2.实在要共享，利用
+  1）atomic 原子操作 将数据操作变成原子操作 例如 atomic<int> var  atomic_int var 等
+  2）mutex  临界区 mutex可以提供 mutex.lock()和mutex.unlock()函数
