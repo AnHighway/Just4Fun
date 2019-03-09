@@ -226,7 +226,11 @@ image
 我们把类A里面的shared_ptr<B> pb_; 改为weak_ptr<B> pb_; 运行结果如下，这样的话，资源B的引用开始就只有1，当pb析构时，
 B的计数变为0，B得到释放，B释放的同时也会使A的计数减一，同时pa析构时使A的计数减一，那么A的计数为0，A得到释放。
 
-image
 
 注意的是我们不能通过weak_ptr直接访问对象的方法，比如B对象中有一个方法print(),我们不能这样访问，pa->pb_->print(); 
 英文pb_是一个weak_ptr，应该先把它转化为shared_ptr,如：shared_ptr<B> p = pa->pb_.lock();    p->print();
+
+当我们在一个自身的类里面d的一个函数里面想要调用自身的weak_ptr时，不能利用Objectptr(this)的方法创建一个只能指针，这样会导致在函数结尾时，新创建
+的指针析构，从而导致本身这个类析构，但是这里只是一个函数结束，不应该调用类的析构函数。
+所以此时可以在我们这个类后面继承:public enable_shared_from_this<Class即本身这个类名>。
+这样在我们需要本身的智能指针的时候，就可以调用shared_from_this()函数获得本身的智能指针；
