@@ -1,0 +1,185 @@
+#include<iostream>
+ 2 #include<stack>
+ 3 using namespace std;
+ 4 
+ 5 typedef struct BiTNode{
+ 6     char data;
+ 7     int lvisited,rvisited;//左、右孩子是否访问过，1表示已访问（此项只在后序非递归2算法中需要）
+ 8     struct BiTNode *lchild,*rchild;
+ 9 }BiTNode,*BiTree;
+10 
+11 void InitBiTree(BiTree &T)//构造空二叉树
+12 {
+13     T=NULL;
+14 }
+15 void CreateBiTree(BiTree &T)//生成二叉树
+16 {
+17     char ch;
+18     cin>>ch;
+19     if(ch=='0')//0代表空
+20         T=NULL;
+21     else
+22     {
+23         T=(BiTree)malloc(sizeof(BiTNode));//生成根结点
+24         if(!T)
+25         {
+26             cout<<"生成结点错误！"<<endl;
+27             return;
+28         }
+29         T->data=ch;
+30         T->lvisited=0;
+31         T->rvisited=0;
+32         CreateBiTree(T->lchild);
+33         CreateBiTree(T->rchild);
+34     }
+35 }
+
+上面为一颗普通二叉树。
+
+#include <stdio.h>
+#include <iostream>
+using namespace std;
+ 
+#define size 20
+typedef int Elemtype;
+ 
+/*二叉排序树的二叉链表存储结构*/
+typedef struct BTNode {
+	Elemtype key;
+	struct BTNode *lchild, *rchild;
+}*BSTree;
+ 
+/*二叉排序树的插入*/
+BSTree InsertNode(BSTree T, BTNode *s) {
+	if (T == NULL)
+		return T = s;
+	if (s->key < T->key)
+		T->lchild = InsertNode(T->lchild, s);
+	if (s->key > T->key)
+		T->rchild = InsertNode(T->rchild, s);
+	return T;
+}
+/*二叉排序树的创建*/
+BSTree Create(BSTree T) {
+	BSTree s = NULL;
+ 
+	int key=0;
+	printf("Please enter keywords,end with -1!\n");
+	while (1) {
+		scanf("%d", &key);
+		if (key == -1)
+			break;
+		s = new BTNode;
+		s->key = key;
+		s->lchild = s->rchild = NULL;
+		T = InsertNode(T, s);		
+	}
+	return T;
+}
+
+这样可以生成一颗平衡二叉树。
+
+
+void PreOrder(BiTree T)//先序递归遍历
+  2 {
+  3     if(T!=NULL)
+  4     {
+  5         cout<<T->data<<" ";
+  6         PreOrder(T->lchild);
+  7         PreOrder(T->rchild);
+  8     }
+  9 }
+ 10 void SqlPreOrder(BiTree T)//先序非递归遍历
+ 11 {
+ 12     stack<BiTree> s;
+ 13     BiTree p=T;
+ 14     while(p || !s.empty())
+ 15     {
+ 16         if(p)
+ 17         {
+ 18             cout<<p->data<<" ";
+ 19             s.push(p);
+ 20             p=p->lchild;
+ 21         }
+ 22         else
+ 23         {
+ 24             p=s.top();
+ 25             p=p->rchild;
+ 26             s.pop();
+ 27         }
+ 28     }
+ 29 }
+ 30 
+ 31 
+ 32 
+ 33 void InOrder(BiTree T)//中序递归遍历
+ 34 {
+ 35     if(T!=NULL)
+ 36     {
+ 37         InOrder(T->lchild);
+ 38         cout<<T->data<<" ";
+ 39         InOrder(T->rchild);
+ 40     }
+ 41 }
+ 42 void SqInOrder(BiTree T)//中序非递归遍历
+ 43 {
+ 44     stack<BiTree> s;
+ 45     BiTree p=T;
+ 46     while(p || !s.empty())
+ 47         if(p)
+ 48         {
+ 49             s.push(p);
+ 50             p=p->lchild;
+ 51         }
+ 52         else
+ 53         {
+ 54             p=s.top();
+ 55             cout<<p->data<<" ";
+ 56             s.pop();
+ 57             p=p->rchild;
+ 58         }
+ 59 }
+ 60 
+ 62 
+ 63 void PostOrder(BiTree T)//后序递归遍历
+ 64 {
+ 65     if(T!=NULL)
+ 66     {
+ 67         PostOrder(T->lchild);
+ 68         PostOrder(T->rchild);
+ 69         cout<<T->data<<" ";
+ 70     }
+ 71 }
+ //后序非递归遍历1思路：因为后序非递归遍历二叉树的顺序是先访问左子树，再访问后子树，最后
+ 74 //访问根结点。当用堆栈来存储结点，必须分清返回根结点时，是从左子树返回的，还是从右子树
+ 75 //返回的。所以，使用辅助指针r，其指向最近访问过的结点。
+ 76 void SqlPostOrder1(BiTree T)//后序非递归遍历1
+ 77 {
+ 78     stack<BiTree> s;
+ 79     BiTree p=T,r;
+ 80     while(p || !s.empty())
+ 81     {
+ 82         if(p)                             //走到最左边
+ 83         {
+ 84             s.push(p);
+ 85             p=p->lchild;
+ 86         }
+ 87         else                             //向右
+ 88         {
+ 89             p=s.top();//取栈顶结点
+ 90             if(p->rchild && p->rchild!=r)//如果右子树存在，且未被访问过
+ 91             {
+ 92                 p=p->rchild;
+ 93                 s.push(p);
+ 94                 p=p->lchild;             //再走到最左
+ 95             }
+ 96             else                         //否则，访问栈顶结点并弹出
+ 97             {
+ 98                 cout<<p->data<<" ";
+ 99                 r=p;                     //记录该结点
+100                 s.pop();
+101                 p=NULL;                     //结点访问完后，重置p指针
+102             }
+103         }
+104     }
+105 }
