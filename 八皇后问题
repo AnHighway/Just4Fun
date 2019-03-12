@@ -1,0 +1,74 @@
+在一个8X8的棋盘上摆放皇后棋Queen，规定每一行只能摆一个，并且任意一个Queen的一列，一行，左右对角线都不能有其他Queen；
+
+#include<iostream>
+using namespace std;
+#define ArSize 8
+int num=0;
+void main(){
+int panel[8][8]={0};
+int row=0;
+setchess(panel,row);
+  solve(chessboard, 0);
+   cout << "八皇后问题共有" << num << "种解！" << endl;
+   system("pause");
+   return 0;
+}
+
+bool setchess(int panel[8][8],int row)
+{
+    for (int column = 0; column < ArSize; ++column)
+   {
+       panel[row][column]=1;
+       
+       if(check(penal,row,column)
+       {
+          if(row+1==ArSize)
+          {
+              output(panel);
+          }
+          else
+          {
+          setchess(panel,row+1);
+          }
+       }
+       panel[row][column]=0;
+    }
+}
+
+bool check(int arr[8][8],int row, int column)
+{
+  if(row == 0 ) return true;
+  
+  for(int i=0;i<row;i++)
+    {
+      if(arr[i][column]) return false;
+    }
+  
+  for(int i=row-1,j=column-1;i>=0&&j>=0;i--,j--)
+    {
+      if(arr[i][j]) return false;
+    }
+    
+  for(int i=row-1,j=column+1;i>=0&&j<8;i--,j++)
+  {
+    if(arr[i][j]) return false;
+   }
+   
+   return ture;
+}
+
+void output(int panel[8][8])
+{
+     ++num;
+    cout << "**********************" << num << "*********************" << endl;
+     for (int i = 0; i < ArSize; ++i)
+     {
+         for (int j = 0; j < ArSize; ++j)
+         {
+              cout << arr[i][j] << " ";
+        }
+          cout << endl;
+     }
+     cout << "*********************************************" << endl;
+ 
+}
