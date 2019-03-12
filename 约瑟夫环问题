@@ -1,0 +1,44 @@
+先创建一个循环链表，其中数据从0~n，输入n,k,m三个数，表示从第K个人开始报数，数到第M个数时将这个链表剔除。然后一直循环直到最后一个人被T出去
+
+#include<iostream>
+#include<stdlib.h>
+#include<stdio.h>
+
+typedef struct ListNode{
+  int data;
+  struct ListNode *next;
+  }ListNode,*LinkList
+  
+  void Josephus(int n,int k,int m){
+    /* 创建一个循环链表*/
+    Linklist p,pre,curr;
+    p=(LinkList)malloc(sizeof(ListNode));//头指针
+    p->data=0;
+    p->next=p;
+    curr=p;
+    for(int i=1;i<n;i++){
+      t=(LinkList)malloc(sizeof(ListNode));
+      t->data=i;
+      t->next=curr->next;
+      curr->next=t;
+      curr=t;
+       }
+    /*创建完成*/   
+       while(k--){
+       pre=p;
+       p=p->next;
+       }//从0开始先到开始报数K的位置
+      while(n--){
+      for(int s=m-1;s--;pre=p,p=p->next);//从K开始循环向后移动到报M的位置。
+      pre->next=p->next;
+      printf("%d->"p->data);
+      free(p);
+      p=pre->next;
+      }
+       
+  }
+  
+  int main(){
+  josephus(13,4,1);
+  }
+  
