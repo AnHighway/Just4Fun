@@ -27,10 +27,12 @@ int main()
   long long l,r count;
   cin>>l>>r;
   long long s=l*(l+1)/2;
-  for(int i=l;i<=r;i++)
+  while(l<=r)
   {
   if(s%3==0) count++;
-  s+=i;
+  l++;
+  s+=l;
   }
 cout<<count;
 }
+///这样会加快运算时间，比for循环快
