@@ -1,0 +1,79 @@
+大家一定玩过“推箱子”这个经典的游戏。具体规则就是在一个N*M的地图上，有1个玩家、1个箱子、1个目的地以及若干障碍，其余是空地。玩家可以往上下左右4个方向移动
+但是不能移动出地图或者移动到障碍里去。如果往这个方向移动推到了箱子，箱子也会按这个方向移动一格，当然，箱子也不能被推出地图或推到障碍里。
+当箱子被推到目的地以后，游戏目标达成。现在告诉你游戏开始是初始的地图布局，请你求出玩家最少需要移动多少步才能够将游戏目标达成。
+
+
+BFS搜索可以在无权图中找到最短路径
+
+#include<iostream>
+#include<queue>
+#include<string>
+using namespace std;
+
+strutc position{
+int playerX,playerY,boxX,boxY;
+position(int px,int py,int bx,int by):playerX(px),playerY(py),boxX(bx),boxY(by){}
+};
+int horiz[]={0,0,1,-1},vertic[]={1,-1,0,0};//用来控制人物的水平移动和垂直移动
+int vis[10][10][10][10];//记录地图中某个点是否访问过，访问过则加1，表示走过来一步
+int px,py,bx,by,dx,dy;//地图中各个物件的坐标，人物，箱子，目的destination
+int n,m;//地图大小
+char map[10][10];
+int main()
+{
+cin>>n>>m;
+for(int i=0;i<n;i++)
+  {
+    for(int j=0;j<m;j++)
+    {
+      cin>>map[i][j];   
+    }
+  }
+for(int i=0;i<n;i++)
+  {
+    for(int j=0;j<m;j++)
+    {
+      if(map[i][j]=='X')px=i，py=j;
+      else if(map[i][j]=='*')bx=i,by=j;
+      else if(map[i][j]=='@')dx=i,dy=j;
+    }
+  }
+cout<<bfs()<<endl;
+return 0;
+}
+
+
+
+int bfs()
+{
+  vis[px][py][bx][by]=1;
+  position p(px,py,bx,by);
+  queue<position> que;
+  que.push(p);
+  while(que.size())
+  {
+    front=que.front();
+    que.pop();
+    if(front.boxX==dx&&front.boxY==dy) return vis[front.playerX][front.playerY][front.boxX][front.boxY]-1;//如果箱子到达目的地，返回走的步数
+    for(int i=0;i<4;i++)//判断上下左右四个方向移动后的变化
+    {
+      int nx=front.playerX+a[i],ny=front.playerY+b[i];
+      if(nx<0||ny<0||map[nx][ny]=='#'||nx>=m||ny>=n)continue//判断往各个方向走一步之后会不会碰到障碍或者出界
+      if(nx==front.boxX&&ny==front.boxY)//判断箱子在玩家下一步走的地方，则玩家行动会影响到箱子
+      {
+        if(nx+a[i]<0||ny+b[i]<0||map[nx+a[i]][ny+b[i]]=='#'||nx+a[i]>=m||ny+b[i]>=n)continue;//判断玩家会不会把箱子推出界或碰到障碍
+        if(vis[nx][ny][nx+a[i]][ny+b[i]])continue;//如果这个点是走过的则不能走
+        vis[nx][ny][nx+a[i]][ny+b[i]]=vis[front.playerX][front.playerY][front.boxX][front.boxY]+1;//没有走过，则向这个方向走一步，将步数加1
+        que.push(p(nx,ny,nx+a[i],ny+b[i]));//将新的人物坐标和箱子坐标压入队列，因为此时箱子被人推动，两个物体都要进行下一次移动判断      
+      }
+      
+      else//人物还没走到箱子周围
+      {
+        if(vis[nx][ny][p.xb][p.yb])continue;//这个点访问过了，不再访问
+        vis[nx][ny][front.boxX][front.boxY]=vis[front.playerX][front.playerYy][front.boxX][front.boxY]+1;//没访问过就走一步，步数加1
+        que.push(p(nx,ny,front.boxX,front.boxY));//此时箱子不在人物周围，位置不会变，所以只将人物的新坐标更改压入队列
+      }
+    }
+  }
+  return -1；//如果无论如何到无法到达目的地则返回-1
+}
