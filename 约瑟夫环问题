@@ -17,7 +17,7 @@ typedef struct ListNode{
     p->next=p;
     curr=p;
     for(int i=1;i<n;i++){
-      t=(LinkList)malloc(sizeof(ListNode));
+     auto t=(LinkList)malloc(sizeof(ListNode));
       t->data=i;
       t->next=curr->next;
       curr->next=t;
@@ -42,3 +42,56 @@ typedef struct ListNode{
   josephus(13,4,1);
   }
   
+  
+  //另外一种使用递归得方法解决约瑟夫环问题
+  //法1
+  int Joseph(int m,int k)
+ 2 {
+ 3     if(m<=0||k<=0)
+ 4     {
+ 5         cout<<"error!"<<endl;
+ 6         return -1;
+ 7     }else
+ 8     {
+ 9         if(m==1)
+10         {
+11             return 0;
+12         }else
+13         {
+14             return ((Joseph(m-1,k)+k)%m);
+15         }
+16     }
+17 }
+
+//法2 可以输出每次出队列的位置
+int Joseph(int m,int k,int i)
+{
+    if(m<=0||k<=0||m<i)
+    {
+        cout<<"error"<<endl;
+        return -1;
+
+    }else
+    {
+        if(i==1)
+        {
+            return (m+k-1)%m;
+        }else
+        {
+            return ((Joseph(m-1,k,i-1)+k)%m);
+        }
+    }
+}
+
+int main()
+{   
+    cout<<"递归方法一"<<endl;
+    cout << Joseph(6,3) << endl;
+    cout<<"递归方法二"<<endl;
+    for(int i=1;i<=6;i++)
+    {
+        cout<<Joseph(6,3,i)<<endl;
+    }
+    getchar();
+    return 0;
+}
