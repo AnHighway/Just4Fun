@@ -88,7 +88,7 @@ using namespace std;
  
 long long c[105][105];
 const int mod = 1000000007;
-void init()
+void init()//构建排列组合数组
 {
     c[0][0]=1;
     for(int i=1;i<=100;i++){
@@ -115,7 +115,7 @@ int main()
                {                     
                    if((i*a+j*b)>k)                         
                        break;                     
-                   if((i*a+j*b)==k)
+                   if((i*a+j*b)==k)//从长度为a的歌组里取i首和从长度为b的歌组里取j首组合为长度为K的歌
                    {                         
                       sum+=c[x][i]*c[y][j];                     
                    }                 
