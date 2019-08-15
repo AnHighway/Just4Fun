@@ -60,3 +60,69 @@ int main()
     }
  
 }
+
+
+//另外一种思路
+
+
+精妙之处就在于如何计算C<m,n>
+比如：
+205
+1 92 4 92
+中，可行的解有选92中选13个1、92中选48个4。C<92,48>怎么算？
+
+
+利用数学归纳法：
+由C(n,k) = C(n-1,k) + C(n-1,k-1）；
+对应于杨辉三角：
+1
+1 1
+1 2 1
+1 3 3 1
+1 4 6 4 1
+
+//小Q的歌单
+#include<cstdio>
+#include<iostream>
+using namespace std;
+ 
+long long c[105][105];
+const int mod = 1000000007;
+void init()
+{
+    c[0][0]=1;
+    for(int i=1;i<=100;i++){
+        c[i][0]=1;
+        for(int j=1;j<=100;j++){
+            c[i][j] = (c[i-1][j-1]+c[i-1][j])%mod;
+        }
+    } 
+}
+ 
+int main()
+{     
+    int k,i,j,x,y,a,b;     
+    long long sum;     
+    init();     
+    while(cin>>k>>a>>x>>b>>y)
+    {         
+        sum = 0;         
+        if(a!=b)
+        {             
+            for(i=0;i<=x;i++)
+            {                 
+               for(j=0;j<=y;j++)
+               {                     
+                   if((i*a+j*b)>k)                         
+                       break;                     
+                   if((i*a+j*b)==k)
+                   {                         
+                      sum+=c[x][i]*c[y][j];                     
+                   }                 
+               }             
+            }         
+        }         
+       printf("%ld\n",sum%1000000007);     
+    }     
+return 0;
+} 
